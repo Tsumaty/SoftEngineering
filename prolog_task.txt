@@ -1,0 +1,29 @@
+/*
+ * Есть четыре персонажа: Ниф-Ниф, Наф-Наф, Нуф-Нуф и Волк
+ * Они сидят за круглым столом
+ * У каждого своя позиция друг относительно друга
+ * Есть марки с: фауной, флорой, спортом и космосом
+ * Волк собирает марки с фауной
+ * Нуф-Нуф не собирает марки со спортом
+ * Ниф-Ниф сидит справа от того, кто собирает космос
+ * Волк - слева от Наф-Нафа
+ * Нуф-Нуф - напротив Наф-Нафа
+*/
+stamp(fauna).
+stamp(flora).
+stamp(sport).
+stamp(space).
+collects("Wolf", fauna).
+sitting("Wolf", "Naf-Naf", left).
+sitting("Noof-Noof", "Naf-Naf", opposite).
+
+collects(Who, space) :- sitting("Nif-Nif", Who, right).
+sitting(Who1, Who2, right) :- sitting(Who1, "Naf-Naf", left), sitting(Who2, "Naf-Naf", opposite).
+sitting("Nif-Nif", OfWho, Where) :- sitting("Wolf", OfWho, left), sitting("Wolf", "Noof-Noof", Where).
+
+collects("Noof-Noof", What) :- stamp(What), What \= sport, \+ collects("Wolf", What), \+ collects("Naf-Naf", What).
+collects("Nif-Nif", What) :- stamp(What), \+ collects("Noof-Noof", What), \+ collects("Wolf", What), \+ collects("Naf-Naf", What).
+
+
+?- collects(Who, What), write(Who), write(" collects "), writeln(What), fail.
+?- sitting(Who, OfWho, Where), write(Who), write(" is sitting to the "), write(Where), write(" of "), writeln(OfWho), fail.
